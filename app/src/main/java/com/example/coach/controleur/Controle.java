@@ -1,8 +1,15 @@
 package com.example.coach.controleur;
 
+import static com.example.coach.outils.Serializer.deSerialize;
+import static com.example.coach.outils.Serializer.serialize;
+import android.content.Context;
 import com.example.coach.modele.Profil;
 
+
 public final class Controle {
+
+    private static String nomFic = "saveprofil";
+
 
     /**
      * Singleton de l'instance Controle
@@ -25,9 +32,10 @@ public final class Controle {
      * Retourne l'instance du controleur
      * @return
      */
-    public final static Controle getInstance(){
+    public final static Controle getInstance(Context context){
         if(instance == null){
             Controle.instance = new Controle();
+            recupSerialize(context);
         }
         return Controle.instance;
     }
@@ -39,8 +47,9 @@ public final class Controle {
      * @param age
      * @param sexe 1 pour homme, 0 pour femme
      */
-    public void creerProfil(int taille, int poids, int age, int sexe){
+    public void creerProfil(int taille, int poids, int age, int sexe, Context context){
         profil = new Profil(sexe, poids, taille, age);
+        serialize(nomFic, profil, context);
     }
 
     /**
@@ -57,5 +66,41 @@ public final class Controle {
      */
     public String getMessage(){
         return profil.getMessage();
+    }
+
+    public Integer getTaille(){
+        if (profil == null){
+            return null;
+        }else{
+            return profil.getTaille();
+        }
+    }
+
+    public Integer getPoids(){
+        if (profil == null){
+            return null;
+        }else{
+            return profil.getPoids();
+        }
+    }
+
+    public Integer getAge(){
+        if (profil == null){
+            return null;
+        }else{
+            return profil.getAge();
+        }
+    }
+
+    public Integer getSexe(){
+        if (profil == null){
+            return null;
+        }else{
+            return profil.getSexe();
+        }
+    }
+
+    public static void recupSerialize(Context context){
+        profil = (Profil)deSerialize(nomFic, context);
     }
 }

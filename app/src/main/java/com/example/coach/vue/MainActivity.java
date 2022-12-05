@@ -20,6 +20,7 @@ import com.example.coach.controleur.Controle;
 public class MainActivity extends AppCompatActivity {
 
     private RadioButton rdHomme;
+    private RadioButton rdFemme;
     private EditText txtPoids;
     private EditText txtAge;
     private EditText txtTaille;
@@ -31,14 +32,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void init(){
     rdHomme = (RadioButton) findViewById(R.id.rdHomme);
+    rdFemme = (RadioButton) findViewById(R.id.rdFemme);
     txtPoids = (EditText) findViewById(R.id.txtPoids);
     txtAge = (EditText) findViewById(R.id.txtAge);
     txtTaille = (EditText) findViewById(R.id.txtTaille);
     lblIMG = (TextView) findViewById(R.id.lblIMG);
     imgSmiley = (ImageView) findViewById(R.id.imgSmiley);
     btnCalc = (Button) findViewById(R.id.btnCalc);
-    controleur = Controle.getInstance();
+    controleur = Controle.getInstance(MainActivity.this);
     ecouteCalcul();
+    recupProfil();
     }
 
     private void ecouteCalcul(){
@@ -61,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 if(poids == 0 || age == 0 || taille == 0){
                     Toast.makeText(MainActivity.this, "Veuillez saisir tout les champs", Toast.LENGTH_SHORT).show();
                 }else{
-                    controleur.creerProfil(taille, poids, age, sexe);
+                    controleur.creerProfil(taille, poids, age, sexe,MainActivity.this);
                     String message = controleur.getMessage();
                     float img = controleur.getImg();
                     if(message == "trop maigre"){
@@ -79,6 +82,20 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void recupProfil(){
+        if(controleur.getTaille() != null){
+            txtAge.setText("" + controleur.getAge());
+            txtPoids.setText("" + controleur.getPoids());
+            txtTaille.setText("" + controleur.getTaille());
+            if (controleur.getSexe() == 1){
+                rdHomme.setChecked(true);
+                rdFemme.setChecked(false);
+            }
+            btnCalc.performClick();
+        }
+        else{txtTaille.setText("Marche pas");}
     }
 
     @Override
