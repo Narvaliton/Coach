@@ -1,13 +1,11 @@
 package com.example.coach.controleur;
 
 import static com.example.coach.outils.Serializer.deSerialize;
-import static com.example.coach.outils.Serializer.serialize;
+
 import android.content.Context;
 import com.example.coach.modele.AccesDistant;
-import com.example.coach.modele.AccesLocal;
 import com.example.coach.modele.Profil;
-import com.example.coach.modele.AccesDistant;
-import com.example.coach.vue.MainActivity;
+import com.example.coach.vue.CalculActivity;
 import org.json.JSONArray;
 
 import java.util.Date;
@@ -117,7 +115,7 @@ public final class Controle {
 
     public void setProfil(Profil profil){
         this.profil = profil;
-        ((MainActivity)context).recupProfil();
+        ((CalculActivity)context).recupProfil();
     }
 
     public static void recupSerialize(Context context){
