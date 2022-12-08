@@ -1,6 +1,13 @@
 package com.example.coach.modele;
 
+import static com.example.coach.outils.MesOutils.convertDateToString;
+
+import org.json.JSONArray;
+
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class Profil implements Serializable {
 
@@ -17,12 +24,21 @@ public class Profil implements Serializable {
     private int age;
     private float img;
     private String message;
+    private Date dateMesure;
 
-    public Profil(int sexe, int poids, int taille, int age) {
+    /**
+     * Constructeur de Profil
+     * @param sexe
+     * @param poids
+     * @param taille
+     * @param age
+     */
+    public Profil(int sexe, int poids, int taille, int age, Date date) {
         this.sexe = sexe;
         this.poids = poids;
         this.taille = taille;
         this.age = age;
+        this.dateMesure = date;
         calculIMG();
         resultIMG();
     }
@@ -49,6 +65,10 @@ public class Profil implements Serializable {
 
     public String getMessage() {
         return message;
+    }
+
+    public Date getDateMesure() {
+        return dateMesure;
     }
 
     private void calculIMG(){
@@ -81,4 +101,13 @@ public class Profil implements Serializable {
         }
     }
 
+    public JSONArray convertToJSONArray(){
+        List liste = new ArrayList();
+        liste.add(convertDateToString(getDateMesure()));
+        liste.add(getPoids());
+        liste.add(getTaille());
+        liste.add(getAge());
+        liste.add(getSexe());
+        return new JSONArray(liste);
+    }
 }

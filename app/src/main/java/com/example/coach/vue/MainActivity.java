@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     btnCalc = (Button) findViewById(R.id.btnCalc);
     controleur = Controle.getInstance(MainActivity.this);
     ecouteCalcul();
-    recupProfil();
+    //recupProfil();
     }
 
     private void ecouteCalcul(){
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 if(poids == 0 || age == 0 || taille == 0){
                     Toast.makeText(MainActivity.this, "Veuillez saisir tout les champs", Toast.LENGTH_SHORT).show();
                 }else{
-                    controleur.creerProfil(taille, poids, age, sexe,MainActivity.this);
+                    controleur.creerProfil(taille, poids, age, sexe);
                     String message = controleur.getMessage();
                     float img = controleur.getImg();
                     if(message == "trop maigre"){
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void recupProfil(){
+    public void recupProfil(){
         if(controleur.getTaille() != null){
             txtAge.setText("" + controleur.getAge());
             txtPoids.setText("" + controleur.getPoids());
@@ -95,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
             }
             btnCalc.performClick();
         }
-        else{txtTaille.setText("Marche pas");}
     }
 
     @Override

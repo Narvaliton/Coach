@@ -3,14 +3,21 @@ package com.example.coach.controleur;
 import static com.example.coach.outils.Serializer.deSerialize;
 import static com.example.coach.outils.Serializer.serialize;
 import android.content.Context;
+import com.example.coach.modele.AccesDistant;
+import com.example.coach.modele.AccesLocal;
 import com.example.coach.modele.Profil;
+import com.example.coach.modele.AccesDistant;
+import com.example.coach.vue.MainActivity;
+import org.json.JSONArray;
+
+import java.util.Date;
 
 
 public final class Controle {
 
     private static String nomFic = "saveprofil";
-
-
+    private static AccesDistant accesDistant;
+    private static Context context;
     /**
      * Singleton de l'instance Controle
      */
@@ -32,10 +39,16 @@ public final class Controle {
      * Retourne l'instance du controleur
      * @return
      */
-    public final static Controle getInstance(Context context){
+    public final static Controle getInstance(Context contextValoriser){
         if(instance == null){
+            if (contextValoriser != null){
+                context = contextValoriser;
+            }
             Controle.instance = new Controle();
-            recupSerialize(context);
+            accesDistant = new AccesDistant();
+            accesDistant.envoi("dernier", new JSONArray());
+            //profil = accesLocal.recupDernier();
+            //recupSerialize(context);
         }
         return Controle.instance;
     }
@@ -47,9 +60,11 @@ public final class Controle {
      * @param age
      * @param sexe 1 pour homme, 0 pour femme
      */
-    public void creerProfil(int taille, int poids, int age, int sexe, Context context){
-        profil = new Profil(sexe, poids, taille, age);
-        serialize(nomFic, profil, context);
+    public void creerProfil(int taille, int poids, int age, int sexe){
+        profil = new Profil(sexe, poids, taille, age, new Date());
+        accesDistant.envoi("enreg", profil.convertToJSONArray());
+        //accesLocal.ajout(profil);
+        //serialize(nomFic, profil, context);
     }
 
     /**
@@ -98,6 +113,11 @@ public final class Controle {
         }else{
             return profil.getSexe();
         }
+    }
+
+    public void setProfil(Profil profil){
+        this.profil = profil;
+        ((MainActivity)context).recupProfil();
     }
 
     public static void recupSerialize(Context context){
