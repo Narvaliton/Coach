@@ -8,6 +8,7 @@ import com.example.coach.modele.Profil;
 import com.example.coach.vue.CalculActivity;
 import org.json.JSONArray;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 
@@ -24,7 +25,12 @@ public final class Controle {
     /**
      * Attribut de type profil
      */
-    private static Profil profil;
+    private Profil profil;
+
+    /**
+     * Attribut contenant la liste des profils
+     */
+    private static ArrayList<Profil> lesProfils = new ArrayList<Profil>();
 
     /**
      * Constructeur du controleur
@@ -44,7 +50,7 @@ public final class Controle {
             }
             Controle.instance = new Controle();
             accesDistant = new AccesDistant();
-            accesDistant.envoi("dernier", new JSONArray());
+            accesDistant.envoi("tous", new JSONArray());
             //profil = accesLocal.recupDernier();
             //recupSerialize(context);
         }
@@ -60,6 +66,7 @@ public final class Controle {
      */
     public void creerProfil(int taille, int poids, int age, int sexe){
         profil = new Profil(sexe, poids, taille, age, new Date());
+        lesProfils.add(profil);
         accesDistant.envoi("enreg", profil.convertToJSONArray());
         //accesLocal.ajout(profil);
         //serialize(nomFic, profil, context);
@@ -70,7 +77,11 @@ public final class Controle {
      * @return
      */
     public float getImg(){
-        return profil.getImg();
+       if(lesProfils.size() > 0) {
+           return (lesProfils.get(lesProfils.size() - 1)).getImg();
+       }else {
+           return 0;
+       }
     }
 
     /**
@@ -78,8 +89,13 @@ public final class Controle {
      * @return
      */
     public String getMessage(){
-        return profil.getMessage();
+        if(lesProfils.size() > 0) {
+            return (lesProfils.get(lesProfils.size() - 1)).getMessage();
+        }else {
+            return "";
+        }
     }
+
 
     public Integer getTaille(){
         if (profil == null){
@@ -113,12 +129,19 @@ public final class Controle {
         }
     }
 
-    public void setProfil(Profil profil){
-        this.profil = profil;
-        ((CalculActivity)context).recupProfil();
+    public void setLesProfils(ArrayList<Profil> lesProfils){
+        this.lesProfils = lesProfils;
     }
 
-    public static void recupSerialize(Context context){
-        profil = (Profil)deSerialize(nomFic, context);
+    public ArrayList<Profil> getLesProfils(){
+        return this.lesProfils;
     }
+
+    public void delProfil(Profil profilSuppr){
+        accesDistant.envoi("supprimer", profilSuppr.convertToJSONArray());
+    }
+
+    //public static void recupSerialize(Context context){
+      //  this.profil = (Profil)deSerialize(nomFic, context);
+    //}
 }

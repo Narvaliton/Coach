@@ -9,19 +9,27 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.example.coach.R;
+import com.example.coach.controleur.Controle;
 
 public class MainActivity extends AppCompatActivity {
+
+    private Controle controle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        init();
         creerMenu();
+    }
+
+    private void init(){
+        controle = Controle.getInstance(MainActivity.this);
     }
 
     private void creerMenu(){
         ecouteMenu((ImageButton) findViewById(R.id.btnMonIMG), CalculActivity.class);
-        //ecouteMenu((ImageButton) findViewById(R.id.btnMonHistorique, ))
+        ecouteMenu((ImageButton) findViewById(R.id.btnMonHistorique), HistoActivity.class);
     }
 
     private void ecouteMenu(ImageButton imgBtn, final Class classe){

@@ -12,6 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class AccesDistant implements AsyncResponse {
@@ -29,17 +30,23 @@ public class AccesDistant implements AsyncResponse {
         if(message.length > 1){
             if(message[0].equals("enreg")){
                 Log.d(message[0], message[1]);
-            } if(message[0].equals("dernier")){
+            } if(message[0].equals("tous")){
                 try {
-                    JSONObject info = new JSONObject(message[1]);
-                    Date date = convertStringToDate(info.getString("datemesure"), "yyyy-MM-dd hh:mm:ss");
-                    Integer poids = info.getInt("poids");
-                    Integer taille = info.getInt("taille");
-                    Integer age = info.getInt("age");
-                    Integer sexe = info.getInt("sexe");
-                    Profil profil = new Profil(sexe, poids, taille, age, date);
-                    controle.setProfil(profil);
+                    JSONArray jsonArray = new JSONArray((message[1]));
+                    ArrayList<Profil> listeProfil = new ArrayList<Profil>();
+                    for(int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        int poids = jsonObject.getInt("poids");
+                        int taille = jsonObject.getInt("taille");
+                        int sexe = jsonObject.getInt("sexe");
+                        int age = jsonObject.getInt("age");
+                        Date datemesure = convertStringToDate(jsonObject.getString("datemesure"), "yyyy-MM-dd HH:mm:ss");
+                        Profil profil = new Profil(sexe, poids, taille, age, datemesure);
+                        listeProfil.add(profil);
+                    }
+                    controle.setLesProfils(listeProfil);
                 } catch (JSONException e) {
+                    System.out.print("MArchepas");
                     e.printStackTrace();
                 }
                 //controle.setProfil();

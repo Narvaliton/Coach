@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Profil implements Serializable {
+public class Profil implements Serializable, Comparable {
 
 
 
@@ -109,5 +109,10 @@ public class Profil implements Serializable {
         liste.add(getAge());
         liste.add(getSexe());
         return new JSONArray(liste);
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        return dateMesure.compareTo(((Profil)o).getDateMesure());
     }
 }

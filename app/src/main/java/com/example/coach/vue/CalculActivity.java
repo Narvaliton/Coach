@@ -1,5 +1,6 @@
 package com.example.coach.vue;
 
+import static com.example.coach.outils.MesOutils.*;
 import static java.lang.String.format;
 
 import android.content.Intent;
@@ -79,7 +80,7 @@ public class CalculActivity extends AppCompatActivity {
                         imgSmiley.setImageResource(R.drawable.graisse);
                         lblIMG.setTextColor(Color.RED);
                     }
-                    lblIMG.setText("IMG " + message + " : " + format("%.01f", img));
+                    lblIMG.setText("IMG " + message + " : " + format2Decimal(img));
 
                 }
             }
